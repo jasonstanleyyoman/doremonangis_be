@@ -12,6 +12,21 @@ type Dorayaki struct {
 	Stores      []*Store `gorm:"many2many:store_dorayaki"`
 }
 
+type DorayakiWithAmount struct {
+	Dorayaki
+	Amount int
+}
+
+func (dorayaki Dorayaki) Transform() DorayakiWithAmount {
+	var result DorayakiWithAmount
+	result.Flavor = dorayaki.Flavor
+	result.Model = dorayaki.Model
+	result.Description = dorayaki.Description
+	result.ImagePath = dorayaki.ImagePath
+	result.Amount = 0
+	return result
+}
+
 func (Dorayaki) TableName() string {
 	return "dorayaki"
 }

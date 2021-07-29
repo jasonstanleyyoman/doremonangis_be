@@ -15,8 +15,10 @@ type MysqlConnection struct {
 	Db gorm.DB
 }
 
-var lock = &sync.Mutex{}
-var connection *MysqlConnection
+var (
+	lock       sync.Mutex = sync.Mutex{}
+	connection *MysqlConnection
+)
 
 func GetConnection() *MysqlConnection {
 	if connection == nil {
@@ -32,7 +34,6 @@ func GetConnection() *MysqlConnection {
 }
 
 func (conn *MysqlConnection) Connect() {
-
 	dsn := "admin:password@tcp(127.0.0.1:3306)/doremonangis?charset=utf8mb4&parseTime=True&loc=Local"
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
@@ -51,4 +52,5 @@ func (conn *MysqlConnection) Connect() {
 		os.Exit(1)
 	}
 	conn.Db = *db
+
 }
