@@ -55,6 +55,9 @@ func (conn *MysqlConnection) Connect() {
 		Logger: newLogger,
 	})
 
+	fmt.Println(err)
+	fmt.Println(dsn)
+
 	if err != nil {
 		os.Exit(1)
 	}
