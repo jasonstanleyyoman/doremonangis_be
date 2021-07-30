@@ -1,0 +1,42 @@
+version: "3.7"
+services:
+  database:
+    image: mysql:latest
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: doremonangis
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+    networks:
+      - doremonangis_net
+  backend:
+    depends_on:
+      - database
+    image: docker.pkg.github.com/jasonstanleyyoman/doremonangis_be/doremonangis_backend:latest
+    container_name: backend
+    environment:
+      - DB_HOST=database
+      - DB_USERNAME=admin
+      - DB_PORT=3306
+      - DB_PASSWORD=password
+      - DB_DATABASE=doremonangis
+    networks:
+      - doremonangis_net
+    ports:
+      - 8080:8080
+  frontend:
+    depends_on:
+      - backend
+    image: docker.pkg.github.com/jasonstanleyyoman/doremonangis_fe/doremonangis_frontend:latest
+    ports:
+      - 3000:80
+    networks:
+      - doremonangis_net
+
+volumes:
+  db_data:
+networks:
+  doremonangis_net:
+    driver: bridge
